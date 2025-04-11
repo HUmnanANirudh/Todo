@@ -19,19 +19,19 @@ router.get("/:id",async(req:Request,res:Response)=>{
             }
         })
         if(!Todo){
-            return res.status(404).json({msg:"Todo doesn't exist"})
+             res.status(404).json({msg:"Todo doesn't exist"})
         }
-        return res.status(200).json({Todo})
+         res.status(200).json({Todo})
     }catch(e){
         console.log(e)
-        return res.status(500).json({msg:"error"})
+         res.status(500).json({msg:"error"})
     }
 })
 router.post("/",jsonparser, async (req:Request,res:Response)=>{
     const Body = await req.body;
     const {success} = TodoSchema.safeParse(Body)
     if(!success){
-        return res.status(400).json({msg:"Invalid inputs"})
+         res.status(400).json({msg:"Invalid inputs"})
     }
     try{
         const Todo = await prisma.todo.create({
@@ -40,7 +40,7 @@ router.post("/",jsonparser, async (req:Request,res:Response)=>{
                 Description:Body.Description
             }
         })
-        return res.json({
+         res.json({
             id:Todo.id,
             title:Todo.Title
         })
@@ -58,25 +58,25 @@ router.delete("/:id",async(req:Request,res:Response)=>{
             }
         })
         if(!Todo){
-            return res.status(404).json({msg:"Todo doesn't exist"})
+             res.status(404).json({msg:"Todo doesn't exist"})
         }
-        return res.status(200).json({msg:"Todo Deleted"})
+         res.status(200).json({msg:"Todo Deleted"})
     }catch(e){
         console.log(e)
-        return res.status(500).json({msg:"error"})
+         res.status(500).json({msg:"error"})
     }
     })
 router.put("/:id",jsonparser,async(req:Request,res:Response)=>{
     const Body = req.body;
     const {success} = UpdateSchema.safeParse(Body);
     if(!success){
-        return res.status(400).json({msg:"Invalid Inputs"})
+        res.status(400).json({msg:"Invalid Inputs"})
     }
     const id  =  parseInt(req.params.id)
     try{
         const Check = await prisma.todo.findUnique({where:{id:id}})
         if(!Check){
-            return res.status(404).json({msg:"Todo doesn't exist"})
+            res.status(404).json({msg:"Todo doesn't exist"})
         }
         const Update = await prisma.todo.update({
             where:{
@@ -88,10 +88,10 @@ router.put("/:id",jsonparser,async(req:Request,res:Response)=>{
                 Done:Body.Done
             }
         })
-        return res.status(200).json({ Update})
+        res.status(200).json({ Update})
     }catch(e){
         console.log(e)
-        return res.status(500).json({msg:"Error"})
+        res.status(500).json({msg:"Error"})
     }
 })
 export default router;
